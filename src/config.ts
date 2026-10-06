@@ -4,7 +4,7 @@ export const MEDIO = {
   nombre: 'Fuente Primaria',
   lema: 'Política española contada desde los documentos oficiales',
   descripcion:
-    'Información política española elaborada exclusivamente a partir de fuentes oficiales (BOE, Congreso, Senado, La Moncloa) y una sección diaria de curiosidades históricas con fuentes verificables.',
+    'Información política española elaborada exclusivamente a partir de fuentes oficiales (BOE, Congreso de los Diputados, La Moncloa) y una sección diaria de curiosidades históricas con fuentes verificables.',
   idioma: 'es-ES',
   zonaHoraria: 'Europe/Madrid',
   repositorio: 'https://github.com/rubencio67tuntunsahur/periodico',
@@ -28,7 +28,7 @@ export const AVISO_IA =
 export const SECCIONES = {
   politica: {
     nombre: 'Política',
-    descripcion: 'Lo que publican el BOE, las Cortes y el Gobierno, explicado con enlaces a cada documento original.',
+    descripcion: 'Lo que publican el BOE, el Congreso y el Gobierno, explicado con enlaces a cada documento original.',
   },
   historia: {
     nombre: 'Historia',
