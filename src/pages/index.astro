@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import Tarjeta from '../components/Tarjeta.astro';
+import { articulos, ruta } from '../lib/utils';
+
+const politica = await articulos('politica');
+const historia = await articulos('historia');
+const [destacada, ...resto] = politica;
+const ejemplo = [...politica, ...historia].some((a) => a.data.estado === 'ejemplo');
+---
+
+<Base ejemplo={ejemplo}>
+  <div class="rejilla rejilla--portada">
+    <section aria-labelledby="t-politica">
+      <h2 class="titulo-seccion" id="t-politica"><a href={ruta('/politica/')}>Política</a></h2>
+      {
+        destacada ? (
+          <ul class="lista">
+            <li><Tarjeta articulo={destacada} destacada nivel={3} /></li>
+            {resto.slice(0, 9).map((a) => <li><Tarjeta articulo={a} nivel={3} /></li>)}
+          </ul>
+        ) : (
+          <p class="vacio">Todavía no hay piezas publicadas. Cada mañana se publicará aquí lo más relevante del BOE, la agenda de las Cortes y las referencias del Consejo de Ministros.</p>
+        )
+      }
+    </section>
+
+    <aside aria-labelledby="t-historia">
+      <h2 class="titulo-seccion" id="t-historia"><a href={ruta('/historia/')}>Hoy en la historia</a></h2>
+      <div class="caja">
+        {
+          historia.length ? (
+            <ul class="lista">
+              {historia.slice(0, 3).map((a) => <li><Tarjeta articulo={a} nivel={3} /></li>)}
+            </ul>
+          ) : (
+            <p class="meta">Una efeméride y dos curiosidades cada día, con su fuente.</p>
+          )
+        }
+      </div>
+    </aside>
+  </div>
+</Base>

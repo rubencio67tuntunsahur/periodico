@@ -1,0 +1,23 @@
+---
+import Base from './Base.astro';
+import { LEGAL } from '../config';
+import { fechaCorta } from '../lib/utils';
+
+interface Props {
+  titulo: string;
+  descripcion: string;
+  legal?: boolean;
+}
+
+const { titulo, descripcion, legal = false } = Astro.props;
+---
+
+<Base titulo={titulo} descripcion={descripcion}>
+  <article class="articulo">
+    <h1 class="articulo__titulo">{titulo}</h1>
+    {legal && <p class="meta">Última actualización: {fechaCorta(new Date(LEGAL.actualizado))}</p>}
+    <div class="prosa">
+      <slot />
+    </div>
+  </article>
+</Base>

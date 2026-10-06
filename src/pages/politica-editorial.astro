@@ -1,0 +1,78 @@
+---
+import Pagina from '../layouts/Pagina.astro';
+import { AVISO_IA, MEDIO } from '../config';
+import { ruta } from '../lib/utils';
+---
+
+<Pagina
+  titulo="Política editorial y uso de IA"
+  descripcion={`Principios editoriales de ${MEDIO.nombre}: fuentes oficiales, neutralidad, verificación y uso de inteligencia artificial.`}
+  legal
+>
+  <p>
+    {MEDIO.nombre} explica lo que dicen los documentos públicos. No es un medio de opinión. Estas son las reglas que sigue
+    cada pieza, sin excepciones.
+  </p>
+
+  <h2>1. Solo fuentes primarias u oficiales</h2>
+  <p>
+    En política trabajamos exclusivamente con documentos de las instituciones: el Boletín Oficial del Estado, los datos
+    abiertos y la agenda del Congreso de los Diputados y del Senado, las referencias del Consejo de Ministros publicadas por
+    La Moncloa y, cuando procede, boletines autonómicos y el Parlamento Europeo. No copiamos, reescribimos ni parafraseamos
+    artículos de otros medios.
+  </p>
+
+  <h2>2. Todo enlazado, hechos separados del contexto</h2>
+  <p>
+    Cada pieza termina con la lista de fuentes originales. El apartado «Qué ha pasado» recoge solo lo que dice el documento;
+    el apartado «Contexto» explica antecedentes y siempre indica de dónde procede cada dato.
+  </p>
+
+  <h2>3. Neutralidad</h2>
+  <p>
+    Usamos lenguaje descriptivo y evitamos adjetivos valorativos sobre partidos, instituciones o personas. Cuando hay
+    posturas enfrentadas, recogemos las principales con la misma extensión y las atribuimos a quien las sostiene, citando la
+    fuente oficial donde constan (por ejemplo, el Diario de Sesiones). Los titulares son informativos: describen lo ocurrido
+    sin buscar el clic.
+  </p>
+
+  <h2>4. Nada sin verificar</h2>
+  <p>
+    No publicamos datos, cifras, fechas ni citas que no puedan comprobarse en la fuente enlazada. Si algo no se puede
+    verificar, no se publica.
+  </p>
+
+  <h2>5. Curiosidades históricas</h2>
+  <ul>
+    <li>Cada curiosidad enlaza al menos a una fuente verificable: enciclopedias de referencia, archivos, museos, bibliotecas o instituciones académicas.</li>
+    <li>Cada dato lleva un nivel de confianza: <strong>alto</strong> (documentado de forma consistente por fuentes de referencia) o <strong>medio</strong> (hay discrepancias de detalle entre fuentes o la documentación es indirecta). Los de confianza media solo se publican tras una revisión expresa de la redacción y se señalan así en la pieza.</li>
+    <li>Evitamos los mitos populares; cuando aparecen, es para desmentirlos explícitamente con fuentes.</li>
+  </ul>
+
+  <h2>6. Cómo usamos la inteligencia artificial</h2>
+  <p>
+    Las piezas se redactan con asistencia de un modelo de IA (Claude, de Anthropic) mediante este procedimiento:
+  </p>
+  <ol>
+    <li>Un programa descarga cada día los documentos de las fuentes oficiales y guarda una copia con la fecha y la dirección de origen.</li>
+    <li>La IA redacta <strong>borradores</strong> a partir de esos documentos, siguiendo estas normas.</li>
+    <li>Una persona de la redacción revisa cada borrador contra la fuente original. Nada se publica automáticamente: solo se publica lo que esa persona aprueba de forma expresa.</li>
+  </ol>
+  <p>La IA no genera imágenes ni inventa declaraciones. Todas las piezas llevan al pie este aviso:</p>
+  <blockquote><p>{AVISO_IA}</p></blockquote>
+  <p>
+    El código del sitio y de los programas de recogida es público y puede consultarse en
+    <a href={MEDIO.repositorio} rel="noopener">GitHub</a>.
+  </p>
+
+  <h2>7. Correcciones</h2>
+  <p>
+    Si una pieza contiene un error, la corregimos y añadimos al pie una nota fechada que explica qué ha cambiado. No borramos
+    errores en silencio. Puedes avisarnos desde <a href={ruta('/correcciones/')}>Correcciones y contacto</a>.
+  </p>
+
+  <h2>8. Independencia</h2>
+  <p>
+    {MEDIO.nombre} no tiene publicidad ni recibe financiación de partidos políticos, administraciones o empresas.
+  </p>
+</Pagina>

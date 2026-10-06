@@ -1,0 +1,61 @@
+---
+import Pagina from '../layouts/Pagina.astro';
+import Dato from '../components/Dato.astro';
+import { LEGAL, MEDIO } from '../config';
+---
+
+<Pagina titulo="Política de privacidad" descripcion={`Cómo trata ${MEDIO.nombre} los datos personales.`} legal>
+  <h2>Resumen</h2>
+  <p>
+    {MEDIO.nombre} no usa cookies, no tiene analítica de visitas, publicidad, formularios ni registro de usuarios. Solo se
+    tratan datos personales si nos escribes (por ejemplo, para pedir una corrección).
+  </p>
+
+  <h2>1. Responsable del tratamiento</h2>
+  <ul>
+    <li>Responsable: <Dato valor={LEGAL.titular} /></li>
+    <li>NIF: <Dato valor={LEGAL.nif} /></li>
+    <li>Contacto: <Dato valor={LEGAL.correo} /></li>
+  </ul>
+
+  <h2>2. Qué datos se tratan y para qué</h2>
+  <h3>Mensajes que nos envías</h3>
+  <p>
+    Si escribes al correo de contacto o abres una incidencia pública en el repositorio de GitHub del proyecto, trataremos
+    los datos que nos facilites (nombre, dirección de correo o usuario de GitHub y el contenido del mensaje) con la única
+    finalidad de responderte y, en su caso, corregir la información publicada.
+  </p>
+  <ul>
+    <li>Base jurídica: tu consentimiento al escribirnos (art. 6.1.a del RGPD).</li>
+    <li>Conservación: el tiempo necesario para tramitar tu solicitud y, como máximo, un año después.</li>
+    <li>Las incidencias abiertas en GitHub son públicas por naturaleza; si prefieres privacidad, usa el correo.</li>
+  </ul>
+
+  <h3>Alojamiento</h3>
+  <p>
+    La web se aloja en GitHub Pages (GitHub, Inc.). Como cualquier servidor, GitHub puede registrar la dirección IP de los
+    visitantes por motivos de seguridad y funcionamiento, según su
+    <a href="https://docs.github.com/es/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">declaración de privacidad</a>.
+    {MEDIO.nombre} no tiene acceso a esos registros ni los utiliza.
+  </p>
+
+  <h3>Preferencia de modo oscuro</h3>
+  <p>
+    Si cambias entre modo claro y oscuro, tu elección se guarda en el almacenamiento local de tu navegador
+    (<code>localStorage</code>). No es una cookie, no contiene datos personales y nunca se envía a ningún servidor. Puedes
+    borrarla desde la configuración de tu navegador.
+  </p>
+
+  <h3>Tipografías</h3>
+  <p>Las tipografías se sirven desde el propio sitio; no se cargan recursos de terceros como Google Fonts.</p>
+
+  <h2>3. Destinatarios</h2>
+  <p>No se ceden datos a terceros salvo obligación legal.</p>
+
+  <h2>4. Tus derechos</h2>
+  <p>
+    Puedes ejercer los derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a
+    <Dato valor={LEGAL.correo} />. Si consideras que no se han atendido correctamente, puedes reclamar ante la
+    <a href="https://www.aepd.es" rel="noopener">Agencia Española de Protección de Datos</a>.
+  </p>
+</Pagina>

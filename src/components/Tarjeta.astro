@@ -1,0 +1,24 @@
+---
+import { FORMATOS } from '../config';
+import { fechaCorta, fechaISO, urlArticulo, type Articulo } from '../lib/utils';
+
+interface Props {
+  articulo: Articulo;
+  destacada?: boolean;
+  nivel?: 2 | 3;
+}
+
+const { articulo, destacada = false, nivel = 2 } = Astro.props;
+const { data } = articulo;
+const Titulo = `h${nivel}` as 'h2' | 'h3';
+---
+
+<article class:list={['tarjeta', { 'tarjeta--destacada': destacada }]}>
+  <p class="tarjeta__cintillo">{FORMATOS[data.formato]}</p>
+  <Titulo class="tarjeta__titulo"><a href={urlArticulo(articulo)}>{data.titulo}</a></Titulo>
+  <p class="tarjeta__entradilla">{data.entradilla}</p>
+  <p class="meta">
+    <time datetime={fechaISO(data.fecha)}>{fechaCorta(data.fecha)}</time>{' · '}
+    {data.fuentes.length} {data.fuentes.length === 1 ? 'fuente' : 'fuentes'}
+  </p>
+</article>

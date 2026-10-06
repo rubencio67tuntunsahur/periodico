@@ -1,0 +1,26 @@
+---
+import Base from '../../layouts/Base.astro';
+import Tarjeta from '../../components/Tarjeta.astro';
+import { SECCIONES } from '../../config';
+import { articulos } from '../../lib/utils';
+
+const seccion = SECCIONES.politica;
+const lista = await articulos('politica');
+const ejemplo = lista.some((a) => a.data.estado === 'ejemplo');
+---
+
+<Base titulo={seccion.nombre} descripcion={seccion.descripcion} ejemplo={ejemplo}>
+  <header class="cabecera-seccion">
+    <h1>{seccion.nombre}</h1>
+    <p>{seccion.descripcion}</p>
+  </header>
+  {
+    lista.length ? (
+      <ul class="lista" style="max-width: var(--medida)">
+        {lista.map((a) => <li><Tarjeta articulo={a} /></li>)}
+      </ul>
+    ) : (
+      <p class="vacio">Todavía no hay piezas publicadas en esta sección.</p>
+    )
+  }
+</Base>

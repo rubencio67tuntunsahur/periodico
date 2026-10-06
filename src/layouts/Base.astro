@@ -1,0 +1,139 @@
+---
+import '@fontsource-variable/source-serif-4';
+import '@fontsource-variable/inter';
+import '../styles/global.css';
+import { MEDIO, SECCIONES } from '../config';
+import { fechaLarga, ruta } from '../lib/utils';
+
+interface Props {
+  titulo?: string;
+  descripcion?: string;
+  tipo?: 'website' | 'article';
+  ejemplo?: boolean;
+}
+
+const { titulo, descripcion = MEDIO.descripcion, tipo = 'website', ejemplo = false } = Astro.props;
+const tituloCompleto = titulo ? `${titulo} | ${MEDIO.nombre}` : `${MEDIO.nombre} · ${MEDIO.lema}`;
+const canonica = new URL(Astro.url.pathname, Astro.site);
+const actual = Astro.url.pathname;
+const hoy = fechaLarga(new Date());
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={descripcion} />
+    <link rel="canonical" href={canonica} />
+    <meta name="generator" content={Astro.generator} />
+    {ejemplo && <meta name="robots" content="noindex" />}
+
+    <meta property="og:site_name" content={MEDIO.nombre} />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:type" content={tipo} />
+    <meta property="og:title" content={titulo ?? MEDIO.nombre} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:url" content={canonica} />
+    <meta name="twitter:card" content="summary" />
+
+    <link rel="icon" href={ruta('/favicon.svg')} type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={MEDIO.nombre} href={ruta('/rss.xml')} />
+    <link rel="sitemap" href={ruta('/sitemap-index.xml')} />
+    <meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#15140f" media="(prefers-color-scheme: dark)" />
+
+    <!-- Tema antes de pintar para evitar el parpadeo. La preferencia se guarda
+         en localStorage (no es una cookie y no sale del navegador). -->
+    <script is:inline>
+      (function () {
+        var t = null;
+        try { t = localStorage.getItem('tema'); } catch (e) {}
+        if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'oscuro' : 'claro';
+        document.documentElement.dataset.tema = t;
+      })();
+    </script>
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="salto" href="#contenido">Saltar al contenido</a>
+    {ejemplo && <div class="banda-ejemplo">EJEMPLO DE DISEÑO · contenido ficticio de prueba que nunca se despliega</div>}
+    <header class="cabecera">
+      <div class="contenedor">
+        <div class="cabecera__fecha">
+          <span>{hoy}</span>
+          <button class="tema" type="button" id="boton-tema" aria-label="Cambiar entre modo claro y oscuro">
+            Modo oscuro
+          </button>
+        </div>
+        <div class="cabecera__marca">
+          <a class="cabecera__nombre" href={ruta('/')}>{MEDIO.nombre}</a>
+          <p class="cabecera__lema">{MEDIO.lema}</p>
+        </div>
+        <nav class="nav" aria-label="Secciones">
+          <a href={ruta('/')} aria-current={actual === ruta('/') ? 'page' : undefined}>Portada</a>
+          {
+            Object.entries(SECCIONES).map(([clave, s]) => (
+              <a href={ruta(`/${clave}/`)} aria-current={actual.startsWith(ruta(`/${clave}/`)) ? 'page' : undefined}>
+                {s.nombre}
+              </a>
+            ))
+          }
+          <a href={ruta('/politica-editorial/')} aria-current={actual === ruta('/politica-editorial/') ? 'page' : undefined}>
+            Cómo trabajamos
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido" class="contenedor">
+      <slot />
+    </main>
+
+    <footer class="pie">
+      <div class="contenedor pie__rejilla">
+        <div>
+          <h2>{MEDIO.nombre}</h2>
+          <p>
+            {MEDIO.descripcion} Cada pieza enlaza al documento original. Las piezas se redactan con asistencia de IA y las
+            revisa y aprueba una persona antes de publicarse.
+          </p>
+        </div>
+        <div>
+          <h2>Información</h2>
+          <ul>
+            <li><a href={ruta('/politica-editorial/')}>Política editorial y uso de IA</a></li>
+            <li><a href={ruta('/correcciones/')}>Correcciones y contacto</a></li>
+            <li><a href={ruta('/rss.xml')}>Feed RSS</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Legal</h2>
+          <ul>
+            <li><a href={ruta('/aviso-legal/')}>Aviso legal</a></li>
+            <li><a href={ruta('/privacidad/')}>Política de privacidad</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <script is:inline>
+      (function () {
+        var b = document.getElementById('boton-tema');
+        function pinta() {
+          var oscuro = document.documentElement.dataset.tema === 'oscuro';
+          b.textContent = oscuro ? 'Modo claro' : 'Modo oscuro';
+          b.setAttribute('aria-pressed', String(oscuro));
+        }
+        pinta();
+        b.addEventListener('click', function () {
+          var t = document.documentElement.dataset.tema === 'oscuro' ? 'claro' : 'oscuro';
+          document.documentElement.dataset.tema = t;
+          try { localStorage.setItem('tema', t); } catch (e) {}
+          pinta();
+        });
+      })();
+    </script>
+  </body>
+</html>

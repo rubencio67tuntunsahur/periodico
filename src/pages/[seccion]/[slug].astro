@@ -1,0 +1,108 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { AVISO_IA, FORMATOS, MEDIO, SECCIONES } from '../../config';
+import { articulos, fechaCorta, fechaISO, minutosLectura, ruta, urlArticulo, type Articulo } from '../../lib/utils';
+
+export async function getStaticPaths() {
+  const todos = await articulos();
+  return todos.map((articulo) => ({
+    params: { seccion: articulo.data.seccion, slug: articulo.id },
+    props: { articulo },
+  }));
+}
+
+interface Props {
+  articulo: Articulo;
+}
+
+const { articulo } = Astro.props;
+const { data } = articulo;
+const { Content } = await render(articulo);
+const url = new URL(urlArticulo(articulo), Astro.site).href;
+const ejemplo = data.estado === 'ejemplo';
+
+// Datos estructurados schema.org/NewsArticle
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsArticle',
+  headline: data.titulo,
+  description: data.entradilla,
+  datePublished: fechaISO(data.fecha),
+  dateModified: fechaISO(data.actualizado ?? data.fecha),
+  inLanguage: MEDIO.idioma,
+  articleSection: SECCIONES[data.seccion].nombre,
+  keywords: data.etiquetas.join(', ') || undefined,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+  url,
+  author: { '@type': 'Organization', name: `Redacción de ${MEDIO.nombre}` },
+  publisher: {
+    '@type': 'Organization',
+    name: MEDIO.nombre,
+    logo: { '@type': 'ImageObject', url: new URL(ruta('/logo.png'), Astro.site).href },
+  },
+  isBasedOn: data.fuentes.map((f) => f.url),
+  citation: data.fuentes.map((f) => ({ '@type': 'CreativeWork', name: f.nombre, url: f.url })),
+};
+---
+
+<Base titulo={data.titulo} descripcion={data.entradilla} tipo="article" ejemplo={ejemplo}>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
+  <meta property="article:published_time" content={fechaISO(data.fecha)} slot="head" />
+  <meta property="article:section" content={SECCIONES[data.seccion].nombre} slot="head" />
+
+  <article class="articulo">
+    <p class="tarjeta__cintillo">
+      <a href={ruta(`/${data.seccion}/`)}>{SECCIONES[data.seccion].nombre}</a> · {FORMATOS[data.formato]}
+    </p>
+    <h1 class="articulo__titulo">{data.titulo}</h1>
+    <p class="articulo__entradilla">{data.entradilla}</p>
+    <div class="articulo__meta meta">
+      <span>Redacción de {MEDIO.nombre}</span>
+      <time datetime={fechaISO(data.fecha)}>{fechaCorta(data.fecha)}</time>
+      {data.actualizado && <span>Actualizado: <time datetime={fechaISO(data.actualizado)}>{fechaCorta(data.actualizado)}</time></span>}
+      <span>{minutosLectura(articulo.body)} min de lectura</span>
+      {data.confianza && <span class="confianza">Confianza {data.confianza}</span>}
+    </div>
+
+    <div class="prosa">
+      <Content />
+    </div>
+
+    <section class="fuentes" aria-labelledby="t-fuentes">
+      <h2 id="t-fuentes">Fuentes originales</h2>
+      <ol>
+        {
+          data.fuentes.map((f) => (
+            <li>
+              <a href={f.url} rel="noopener">{f.nombre}</a>
+              {f.tipo && <span class="tipo"> · {f.tipo}</span>}
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    {
+      data.correcciones.length > 0 && (
+        <section class="correcciones" aria-labelledby="t-correcciones">
+          <h2 id="t-correcciones" class="titulo-seccion">Correcciones</h2>
+          <ul>
+            {data.correcciones.map((c) => (
+              <li>
+                <time datetime={fechaISO(c.fecha)}>{fechaCorta(c.fecha)}</time>: {c.texto}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <aside class="aviso-ia">
+      <p>{AVISO_IA}</p>
+      <p>
+        ¿Has visto un error? <a href={ruta('/correcciones/')}>Solicita una corrección</a>.
+      </p>
+    </aside>
+  </article>
+</Base>

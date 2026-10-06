@@ -1,0 +1,10 @@
+---
+// Muestra un dato legal y lo resalta mientras siga siendo un marcador [ ... ].
+interface Props {
+  valor: string;
+}
+const { valor } = Astro.props;
+const pendiente = /^\[.*\]$/.test(valor);
+---
+
+{pendiente ? <span class="marcador">{valor}</span> : <span>{valor}</span>}

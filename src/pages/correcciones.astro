@@ -1,0 +1,45 @@
+---
+import Pagina from '../layouts/Pagina.astro';
+import Dato from '../components/Dato.astro';
+import { LEGAL, MEDIO } from '../config';
+const correoValido = !/^\[.*\]$/.test(LEGAL.correo);
+const asunto = encodeURIComponent(`Corrección – ${MEDIO.nombre}`);
+---
+
+<Pagina titulo="Correcciones y contacto" descripcion={`Cómo solicitar una corrección a ${MEDIO.nombre}.`}>
+  <p>
+    Si crees que una pieza contiene un error de hecho, una fuente mal citada o un tratamiento poco neutral, queremos saberlo.
+  </p>
+
+  <h2>Cómo pedir una corrección</h2>
+  <ul>
+    <li>
+      Por correo electrónico:
+      {correoValido ? <a href={`mailto:${LEGAL.correo}?subject=${asunto}`}>{LEGAL.correo}</a> : <Dato valor={LEGAL.correo} />}
+    </li>
+    <li>
+      O abriendo una incidencia pública en
+      <a href={`${MEDIO.repositorio}/issues/new?title=${asunto}`} rel="noopener">GitHub</a> (necesitas una cuenta gratuita;
+      lo que escribas será público).
+    </li>
+  </ul>
+
+  <h2>Qué incluir</h2>
+  <ol>
+    <li>El enlace a la pieza.</li>
+    <li>La frase o el dato que consideras erróneo.</li>
+    <li>Si puedes, el enlace a la fuente oficial que lo demuestra.</li>
+  </ol>
+
+  <h2>Qué haremos</h2>
+  <p>
+    Revisaremos la solicitud contra la fuente original y responderemos en un plazo máximo de siete días. Si hay un error, lo
+    corregiremos y lo indicaremos al pie de la pieza con la fecha y una explicación de qué ha cambiado.
+  </p>
+
+  <h2>Derecho de rectificación</h2>
+  <p>
+    El derecho de rectificación regulado en la Ley Orgánica 2/1984 puede ejercerse por escrito en el domicilio o el correo
+    indicados en el aviso legal, dentro de los siete días naturales siguientes a la publicación.
+  </p>
+</Pagina>

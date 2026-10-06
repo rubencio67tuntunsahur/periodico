@@ -55,3 +55,12 @@ Flujo de aprobación (principio 5): la web **solo compila `contenido/publicados`
 | **Efemérides** (pista) | `https://api.wikimedia.org/feed/v1/wikipedia/es/onthisday/selected/MM/DD` | ✅ 200 (la URL antigua `es.wikipedia.org/api/rest_v1/...` devolvió 429; usaremos esta). | CC BY-SA. **Solo sirve para encontrar candidatas**: cada dato se contrasta con una fuente institucional (Diccionario Biográfico de la Real Academia de la Historia (`dbe.rah.es`), PARES, BNE, museos y universidades), que es la que se enlaza. |
 
 Ningún script descargará páginas completas de forma masiva: una o pocas peticiones al día por fuente, con un agente de usuario identificable, pausas entre peticiones y caché en `datos/`.
+
+## Decisiones tomadas tras la fase 1
+
+- Nombre: **Fuente Primaria** («Política española contada desde los documentos oficiales»).
+- Hosting: **GitHub Pages** (repositorio público) en `https://rubencio67tuntunsahur.github.io/periodico/`.
+- Estilo: diario sobrio. Tipografía con remates (Source Serif 4) para leer y sin remates (Inter) para la interfaz, ambas alojadas en la propia web. Paleta tinta/papel con acento ocre, sin colores asociados a partidos. Modo oscuro automático y con botón.
+- Sin analítica ni cookies.
+- Sistema del redactor: Windows (los scripts serán multiplataforma con Node.js, sin depender de bash).
+- Pendiente: datos del titular para el aviso legal (marcadores en `src/config.ts`) y comprobar el Senado desde tu conexión.
